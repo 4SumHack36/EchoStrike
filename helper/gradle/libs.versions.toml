@@ -8,6 +8,7 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
 composeBom = "2024.09.00"
+voyager = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -24,6 +25,13 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+
+
+# voyager navigation and screenmodel
+navigator = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager" }
+navigator-tabs = { group = "cafe.adriel.voyager", name = "voyager-tab-navigator", version.ref = "voyager" }
+navigator-transitions = { group = "cafe.adriel.voyager", name = "voyager-transitions", version.ref = "voyager" }
+screen-model = { group = "cafe.adriel.voyager", name = "voyager-screenmodel", version.ref = "voyager" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

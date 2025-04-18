@@ -25,6 +25,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import com.foursum.helper.util.Res.currentPrefix
+import com.foursum.helper.util.Res.n
+import com.foursum.helper.util.Res.nextFileName
+import com.foursum.helper.util.SharedPrefsManager
 
 
 @Composable

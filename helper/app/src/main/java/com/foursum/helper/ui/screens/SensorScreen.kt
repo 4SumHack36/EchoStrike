@@ -25,6 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import com.foursum.helper.models.SensorData
+import com.foursum.helper.ui.screenmodel.SensorScreenModel
+import com.foursum.helper.util.SharedPrefsManager
 
 
 class SensorScreen(

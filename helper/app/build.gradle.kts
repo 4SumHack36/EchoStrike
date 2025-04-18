@@ -56,4 +56,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(libs.navigator)
+    implementation(libs.navigator.tabs)
+    implementation(libs.navigator.transitions)
+    implementation(libs.screen.model)
 }
