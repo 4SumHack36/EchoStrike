@@ -15,6 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.game.screenmodels.GameScreenModel
 import com.example.game.screenmodels.GameState
 import com.example.game.screenmodels.GameTurn
@@ -25,6 +27,7 @@ class GameScreen(private val gameScreenModel: GameScreenModel) : Screen {
     override fun Content() {
         val gameState by gameScreenModel.gameState.collectAsState()
         val gameTurn by gameScreenModel.gameTurn.collectAsState()
+        val navigator = LocalNavigator.currentOrThrow
         val isRecording by gameScreenModel.isRecording.collectAsState()
         val currentSoundDirection by gameScreenModel.currentSoundDirection.collectAsState()
         val isHost = remember { mutableStateOf(gameScreenModel.isHost()) }
@@ -128,7 +131,8 @@ class GameScreen(private val gameScreenModel: GameScreenModel) : Screen {
 
                 // Disconnect button
                 OutlinedButton(
-                    onClick = { gameScreenModel.disconnect() },
+                    onClick = { gameScreenModel.disconnect() ;
+                              navigator.pop() },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)

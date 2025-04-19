@@ -4,10 +4,15 @@ import android.content.Context
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.example.game.models.GameMessage
 import com.example.game.models.SensorData
+import com.example.game.util.KToast
 import com.example.game.util.SensorManagerUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +20,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import loadModelFile
+import org.tensorflow.lite.Interpreter
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileWriter
@@ -26,6 +33,7 @@ import java.net.Socket
 import java.util.*
 import kotlin.random.Random
 
+var predictedClass by mutableIntStateOf(-1)
 // Connection state to track the status of connections
 sealed class ConnectionState {
     object Disconnected : ConnectionState()
@@ -460,7 +468,7 @@ class GameScreenModel(private val context: Context) : ScreenModel {
                         )
 
                         // 1-second delay
-                        kotlinx.coroutines.delay(1000)
+//                        kotlinx.coroutines.delay(500)
 
                         // After delay, "play" the sound (just update UI for now)
                         _messages.value = _messages.value + GameMessage(
@@ -470,11 +478,18 @@ class GameScreenModel(private val context: Context) : ScreenModel {
                         )
 
                         // After "playing" the sound, wait a moment then automatically send response value
-                        kotlinx.coroutines.delay(2000) // Wait 2 seconds to simulate user response time
+                        kotlinx.coroutines.delay(5000) // Wait 2 seconds to simulate user response time
 
                         // Auto-send random value as host's response
-                        if (_gameState.value == GameState.IN_PROGRESS) {
+//                        if (_gameState.value == GameState.IN_PROGRESS) {
+//                            sendRandomValue()
+//                        }
+                        if(value == predictedClass){
                             sendRandomValue()
+                            predictedClass=-1
+                        }
+                        else{
+                            KToast.show(context,"You missed it")
                         }
                     }
                 } catch (e: Exception) {
@@ -685,6 +700,33 @@ class GameScreenModel(private val context: Context) : ScreenModel {
 
             val sensorDataList = csvFileToSensorData(file)
             onRecordingStopped?.invoke(sensorDataList)
+            //manish
+            val savedData = getSavedData()
+            val input = Array(1) { Array(100) { FloatArray(6) } }
+
+            savedData.take(100).forEachIndexed { i, sensorData ->
+                input[0][i] = floatArrayOf(
+                    *sensorData.linearAcceleration,
+                    *sensorData.gyroscope
+                )
+            }
+
+            val output = Array(1) { FloatArray(3) } // Assuming 3 classes
+
+            try {
+                val interpreter = Interpreter(loadModelFile(context.assets, "model4.tflite"))
+                interpreter.run(input, output)
+                predictedClass = output[0].indices.maxByOrNull { output[0][it] } ?: -1
+                println("Predicted class: $predictedClass")
+                KToast.show(context,"Predicted class: $predictedClass", Toast.LENGTH_LONG)
+//                Toast.makeText(context, "Predicted class: $predictedClass", Toast.LENGTH_LONG).show()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.d("TAG", "stopRecording: Model Error: ${e.localizedMessage}")
+                KToast.show(context,"Model error: ${e.localizedMessage}", Toast.LENGTH_LONG)
+//                Toast.makeText(context, "Model error: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+            }
+//manihs
 
         } catch (e: IOException) {
             e.printStackTrace()
