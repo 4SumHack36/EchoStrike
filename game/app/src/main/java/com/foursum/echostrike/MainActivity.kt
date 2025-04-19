@@ -34,8 +34,8 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        Spacer(Modifier.padding(innerPadding))
-                        Navigator(HomeScreen()) {navigator ->
+//                        Spacer(Modifier.padding(innerPadding))
+                        Navigator(HomeScreen(this@MainActivity)) {navigator ->
                             SlideTransition(navigator)
                         }
                     }
