@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    namespace = "com.example.game"
+    namespace = "com.foursum.echostrike"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.game"
-        minSdk = 30
+        applicationId = "com.foursum.echostrike"
+        minSdk = 29
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -40,7 +40,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -49,20 +48,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.voyager.navigator)
-    implementation(libs.voyager.bottom.sheet.navigator)
-    implementation(libs.voyager.tab.navigator)
-    implementation(libs.voyager.screenmodel)
-    implementation(libs.voyager.transitions)
-    implementation(libs.voyager.core) // or whatever is latest
-
-
-    // TensorFlow Lite dependencies
-    implementation(libs.tensorflow.lite)
-    implementation(libs.tensorflow.lite.support)
-    implementation(libs.tensorflow.lite.metadata)
-    implementation(libs.tensorflow.lite.gpu) // Optional GPU acceleration
-    
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -70,4 +55,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(libs.navigator)
+    implementation(libs.navigator.tabs)
+    implementation(libs.navigator.transitions)
+    implementation(libs.screen.model)
+
 }

@@ -14,11 +14,14 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        flatDir {
+            dirs("${rootProject.projectDir}/app/libs")
+        }
         google()
         mavenCentral()
     }
 }
 
-rootProject.name = "Game"
+rootProject.name = "EchoStrike"
 include(":app")
  
