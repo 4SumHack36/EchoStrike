@@ -60,5 +60,8 @@ dependencies {
     implementation(libs.navigator.tabs)
     implementation(libs.navigator.transitions)
     implementation(libs.screen.model)
+    implementation("org.tensorflow:tensorflow-lite:2.13.0")
+    implementation("org.tensorflow:tensorflow-lite-support:0.3.1")
+    implementation("org.tensorflow:tensorflow-lite-gpu:2.13.0")
 
 }

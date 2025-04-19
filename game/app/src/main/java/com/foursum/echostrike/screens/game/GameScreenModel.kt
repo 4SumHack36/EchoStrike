@@ -21,13 +21,22 @@ class GameScreenModel(private val context: Context) : ScreenModel {
 
     private var fileWriter: FileWriter? = null
 
-    fun toggleRecording() {
-        if (_isRecording.value) {
-            stopRecording()
-        } else {
-            startRecording()
-        }
+//    fun toggleRecording() {
+//        if (_isRecording.value) {
+//            stopRecording()
+//        } else {
+//            startRecording()
+//        }
+//    }
+    //manish
+fun toggleRecording(onRecordingStopped: ((List<SensorData>) -> Unit)? = null) {
+    if (_isRecording.value) {
+        stopRecording(onRecordingStopped)
+    } else {
+        startRecording()
     }
+}
+//manish
 
     private fun startRecording() {
         try {
@@ -44,21 +53,49 @@ class GameScreenModel(private val context: Context) : ScreenModel {
         }
     }
 
-    private fun stopRecording() {
+//    private fun stopRecording() {
+//        try {
+//            fileWriter?.close()
+//
+//            val file = File(context.getExternalFilesDir(null), "sensor_data.csv")
+//            val recordedData = file.readLines().drop(1) // Drop the header row
+//
+//            val downsampledData = downsampleDataTo100Rows(recordedData)
+//
+//            FileWriter(file, false).use { writer ->
+//                writer.write(SensorData.getCsvHeader() + "\n") // Write the header
+//                downsampledData.forEach { row ->
+//                    writer.write(row + "\n")
+//                }
+//            }
+//        } catch (e: IOException) {
+//            e.printStackTrace()
+//        } finally {
+//            fileWriter = null
+//            _isRecording.value = false
+//        }
+//    }
+
+    //manish
+    fun stopRecording(onRecordingStopped: ((List<SensorData>) -> Unit)? = null) {
         try {
             fileWriter?.close()
 
             val file = File(context.getExternalFilesDir(null), "sensor_data.csv")
-            val recordedData = file.readLines().drop(1) // Drop the header row
+            val recordedData = file.readLines().drop(1)
 
             val downsampledData = downsampleDataTo100Rows(recordedData)
 
             FileWriter(file, false).use { writer ->
-                writer.write(SensorData.getCsvHeader() + "\n") // Write the header
+                writer.write(SensorData.getCsvHeader() + "\n")
                 downsampledData.forEach { row ->
                     writer.write(row + "\n")
                 }
             }
+
+            val sensorDataList = csvFileToSensorData(file)
+            onRecordingStopped?.invoke(sensorDataList)
+
         } catch (e: IOException) {
             e.printStackTrace()
         } finally {
@@ -66,7 +103,7 @@ class GameScreenModel(private val context: Context) : ScreenModel {
             _isRecording.value = false
         }
     }
-
+//manish
     private fun downsampleDataTo100Rows(data: List<String>): List<String> {
         val totalRows = data.size
         val step = if (totalRows > 100) totalRows / 100 else 1
