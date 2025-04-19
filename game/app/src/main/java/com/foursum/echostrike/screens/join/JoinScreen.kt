@@ -8,5 +8,4 @@ class JoinScreen: Screen {
     override fun Content() {
         JoinComponent()
     }
-
 }
