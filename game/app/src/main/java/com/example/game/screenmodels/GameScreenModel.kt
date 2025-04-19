@@ -1,5 +1,6 @@
 package com.example.game.screenmodels
 
+import android.app.Activity
 import android.content.Context
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
@@ -447,6 +448,8 @@ class GameScreenModel(private val context: Context) : ScreenModel {
 
             // Switch turns now that we've received a value
             // Switch turns now that we've received a value
+//            val direction = SoundDirection.valueOf(value.toString())
+//            _currentSoundDirection.value = direction
             _gameTurn.value = if (isClientTurn) GameTurn.HOST_TURN else GameTurn.CLIENT_TURN
 
             if (isHost) {
@@ -490,6 +493,8 @@ class GameScreenModel(private val context: Context) : ScreenModel {
                         }
                         else{
                             KToast.show(context,"You missed it")
+
+                            (context as Activity).finishAffinity()
                         }
                     }
                 } catch (e: Exception) {
@@ -500,6 +505,7 @@ class GameScreenModel(private val context: Context) : ScreenModel {
                 // Process the value (client-side logic)
                 try {
                     val soundDirection = SoundDirection.fromValue(value)
+                    _currentSoundDirection.value = soundDirection
 
                     // Add a message indicating what value was received
                     _messages.value = _messages.value + GameMessage(
@@ -510,12 +516,19 @@ class GameScreenModel(private val context: Context) : ScreenModel {
 
                     // Client automatically responds after a short delay
                     screenModelScope.launch {
-                        kotlinx.coroutines.delay(1500) // Wait 1.5 seconds to simulate thinking time
+                        kotlinx.coroutines.delay(3000) // Wait 1.5 seconds to simulate thinking time
 
                         // Auto-send random value as client's response
-                        if (_gameState.value == GameState.IN_PROGRESS) {
+                        if(predictedClass == value){
                             sendRandomValue()
                         }
+                        else{
+                            KToast.show(context,"You missed it")
+                            disconnect()
+                        }
+//                        if (_gameState.value == GameState.IN_PROGRESS) {
+//                            sendRandomValue()
+//                        }
                     }
                 } catch (e: Exception) {
                     Log.e("GameScreenModel", "Error processing received value on client", e)
@@ -563,11 +576,20 @@ class GameScreenModel(private val context: Context) : ScreenModel {
     fun disconnect() {
         screenModelScope.launch(Dispatchers.IO) {
             try {
+                Log.d("GameScreenModel", "Disconnect called")
+
                 writer?.close()
                 reader?.close()
                 clientSocket?.close()
+                serverSocket?.close()
+
+                writer = null
+                reader = null
+                clientSocket = null
+                serverSocket = null
 
                 withContext(Dispatchers.Main) {
+                    Log.d("GameScreenModel", "Disconnected successfully")
                     _connectionState.value = ConnectionState.Disconnected
                 }
             } catch (e: Exception) {
@@ -580,6 +602,8 @@ class GameScreenModel(private val context: Context) : ScreenModel {
             }
         }
     }
+
+
 
     // Check if this instance is being used as a host
     fun isHost(): Boolean {

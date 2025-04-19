@@ -21,6 +21,7 @@ import com.example.game.screenmodels.GameScreenModel
 import com.example.game.screenmodels.GameState
 import com.example.game.screenmodels.GameTurn
 import com.example.game.util.VolumeKeyEvents
+import kotlinx.coroutines.launch
 
 class GameScreen(private val gameScreenModel: GameScreenModel) : Screen {
     @Composable
@@ -88,57 +89,105 @@ class GameScreen(private val gameScreenModel: GameScreenModel) : Screen {
                 }
 
                 // Sound direction indicator
-                currentSoundDirection?.let { soundDir ->
-                    Card(
+
+//                currentSoundDirection?.let { soundDir ->
+//                    Card(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(vertical = 16.dp),
+//                        colors = CardDefaults.cardColors(
+//                            containerColor = MaterialTheme.colorScheme.tertiaryContainer
+//                        )
+//                    ) {
+//                        Column(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(16.dp),
+//                            horizontalAlignment = Alignment.CenterHorizontally
+//                        ) {
+//                            Icon(
+//                                imageVector = Icons.Default.Add,
+//                                contentDescription = "Play Sound",
+//                                tint = MaterialTheme.colorScheme.onTertiaryContainer,
+//                                modifier = Modifier.size(48.dp)
+//                            )
+//
+//                            Spacer(modifier = Modifier.height(16.dp))
+//
+//                            Text(
+//                                text = "PLAY SOUND",
+//                                style = MaterialTheme.typography.titleMedium,
+//                                color = MaterialTheme.colorScheme.onTertiaryContainer
+//                            )
+//
+//                            Text(
+//                                text = soundDir.displayName.uppercase(),
+//                                style = MaterialTheme.typography.headlineMedium,
+//                                color = MaterialTheme.colorScheme.onTertiaryContainer
+//                            )
+//                        }
+//                    }
+//                }
+                //manish
+                val displayDirection = currentSoundDirection?.displayName?.uppercase() ?: "NO DIRECTION"
+
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    )
+                ) {
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 16.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.tertiaryContainer
-                        )
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "Play Sound",
-                                tint = MaterialTheme.colorScheme.onTertiaryContainer,
-                                modifier = Modifier.size(48.dp)
-                            )
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Play Sound",
+                            tint = MaterialTheme.colorScheme.onTertiaryContainer,
+                            modifier = Modifier.size(48.dp)
+                        )
 
-                            Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
 
-                            Text(
-                                text = "PLAY SOUND",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onTertiaryContainer
-                            )
+                        Text(
+                            text = "PLAY SOUND",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onTertiaryContainer
+                        )
 
-                            Text(
-                                text = soundDir.displayName.uppercase(),
-                                style = MaterialTheme.typography.headlineMedium,
-                                color = MaterialTheme.colorScheme.onTertiaryContainer
-                            )
-                        }
+                        Text(
+                            text = displayDirection,
+                            style = MaterialTheme.typography.headlineMedium,
+                            color = MaterialTheme.colorScheme.onTertiaryContainer
+                        )
                     }
                 }
 
+                //manish
                 Spacer(modifier = Modifier.height(32.dp))
 
                 // Disconnect button
+                val coroutineScope = rememberCoroutineScope()
+
                 OutlinedButton(
-                    onClick = { gameScreenModel.disconnect() ;
-                              navigator.pop() },
+                    onClick = {
+                        coroutineScope.launch {
+                            gameScreenModel.disconnect()
+                            navigator.pop()
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
                 ) {
                     Text("DISCONNECT")
                 }
+
 //                OutlinedButton(
 //                    onClick = { gameScreenModel.disconnect() },
 //                    modifier = Modifier
