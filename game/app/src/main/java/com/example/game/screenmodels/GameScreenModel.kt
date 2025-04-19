@@ -10,11 +10,15 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.example.game.R
 import com.example.game.models.GameMessage
 import com.example.game.models.SensorData
 import com.example.game.util.KToast
 import com.example.game.util.SensorManagerUtil
+import com.example.game.util.SoundManager
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -438,6 +442,32 @@ class GameScreenModel(private val context: Context) : ScreenModel {
     private fun handleReceivedGameValue(value: Int) {
         if (_gameState.value != GameState.IN_PROGRESS) return
 
+        //Audio cue for player
+        val soundManager = SoundManager()
+
+        soundManager.loadSound(context, R.raw.opponenthit)
+        soundManager.loadSound(context, R.raw.bounce2)
+        soundManager.loadSound(context, R.raw.whiff)
+
+        val direction = value -1;
+
+        CoroutineScope(Dispatchers.Main).launch {
+
+            // Pre-warmup: optional but useful
+            soundManager.playSound(R.raw.opponenthit, 0.5f, direction.toFloat())
+
+            delay(1000L)  // let the audio system "lock-in"
+
+            soundManager.playSound(R.raw.bounce2, 1.0f, direction.toFloat())  // Play for real
+
+            delay(400L)
+
+            soundManager.playSound(R.raw.whiff, 0.8f, direction.toFloat())
+
+        }
+
+
+        //audio cue end
         val isHost = serverSocket != null
         val isClientTurn = _gameTurn.value == GameTurn.CLIENT_TURN
 
@@ -485,7 +515,9 @@ class GameScreenModel(private val context: Context) : ScreenModel {
 //                            sendRandomValue()
 //                        }
                         if(value == predictedClass){
+                            soundManager.playSound(R.raw.opponenthit, 1.0f, direction.toFloat())
                             sendRandomValue()
+
                             predictedClass=-1
                         }
                         else{
