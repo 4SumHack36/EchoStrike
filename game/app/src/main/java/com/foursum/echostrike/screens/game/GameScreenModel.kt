@@ -10,8 +10,21 @@ import kotlinx.coroutines.flow.asStateFlow
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
+import kotlin.random.Random
 
 class GameScreenModel(private val context: Context) : ScreenModel {
+
+    //Audio Logic
+
+//    var direction = Random(3).nextInt()
+//
+//    if(direction == 0){
+//
+//    }
+
+
+
+
     private val sensorManagerUtil = SensorManagerUtil(context)
     private val _sensorData = MutableStateFlow(SensorData())
     val sensorData: StateFlow<SensorData> = _sensorData.asStateFlow()
