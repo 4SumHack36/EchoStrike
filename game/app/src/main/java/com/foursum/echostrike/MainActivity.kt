@@ -53,11 +53,13 @@ class MainActivity : ComponentActivity() {
                 KeyEvent.ACTION_DOWN -> {
                     VolumeKeyEvents.onVolumeUpPress()
                     return true
+//                    VolumeKeyEvents.volPressed = true
                 }
 
                 KeyEvent.ACTION_UP -> {
                     VolumeKeyEvents.onVolumeUpRelease()
                     return true
+//                    VolumeKeyEvents.volPressed = false
                 }
             }
         }

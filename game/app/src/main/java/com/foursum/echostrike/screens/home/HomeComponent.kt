@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.LocalNavigator
+import com.foursum.echostrike.screens.game.GameScreen
 import com.foursum.echostrike.screens.menu.MenuScreen
 
 @Composable
@@ -52,7 +53,7 @@ fun HomeComponent(context: Context) {
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onLongPress = {
-                                navigator?.push(MenuScreen())
+                                navigator?.push(GameScreen(context))
                             }
                         )
                     },
