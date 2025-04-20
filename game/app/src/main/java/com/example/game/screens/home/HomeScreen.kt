@@ -17,7 +17,7 @@ class HomeScreen : Screen {
         HomeComponent(
             onHostClick = { navigator.push(HostScreen()) },
             onJoinClick = { navigator.push(JoinScreen()) },
-            onMotionDetectionClick = {}
+//            onMotionDetectionClick = {}
         )
     }
 }

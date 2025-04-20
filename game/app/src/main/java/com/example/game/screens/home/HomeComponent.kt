@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 fun HomeComponent(
     onHostClick: () -> Unit, 
     onJoinClick: () -> Unit,
-    onMotionDetectionClick: () -> Unit
+//    onMotionDetectionClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -49,16 +49,16 @@ fun HomeComponent(
         
         Spacer(modifier = Modifier.height(16.dp))
         
-        Button(
-            onClick = onMotionDetectionClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.tertiary
-            )
-        ) {
-            Text("Motion Detection")
-        }
+//        Button(
+//            onClick = onMotionDetectionClick,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(56.dp),
+//            colors = ButtonDefaults.buttonColors(
+//                containerColor = MaterialTheme.colorScheme.tertiary
+//            )
+//        ) {
+//            Text("Motion Detection")
+//        }
     }
 }
