@@ -13,7 +13,7 @@ Players use motion sensors to “hit” a virtual ball based on audio cues, and 
 <a href="http://tiny.cc/9o2h001">Video Link</a>
 
 ## Presentation Link:
-<a href="[https://bit.ly/hack36_24_ppt](https://www.canva.com/design/DAGlIkSqLVQ/8DFl9WtDTjss5aUQUtAzkw/edit?ui=eyJBIjp7fX0)">PPT link here</a>
+<a href="https://www.canva.com/design/DAGlIkSqLVQ/8DFl9WtDTjss5aUQUtAzkw/edit?ui=eyJBIjp7fX0">PPT link here</a>
 
 ## Table of Contents:
 - [Introduction](#introduction)
