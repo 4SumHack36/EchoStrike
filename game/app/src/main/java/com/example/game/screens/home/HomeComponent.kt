@@ -6,12 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun HomeComponent(
-    onHostClick: () -> Unit, 
+    onHostClick: () -> Unit,
     onJoinClick: () -> Unit,
-    onMotionDetectionClick: () -> Unit
+//    onMotionDetectionClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -31,9 +32,9 @@ fun HomeComponent(
             onClick = onHostClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
+                .height(112.dp)
         ) {
-            Text("Host a Game")
+            Text(text = "Host a Game", fontSize = 24.sp)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -42,23 +43,23 @@ fun HomeComponent(
             onClick = onJoinClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
+                .height(112.dp)
         ) {
-            Text("Join a Game")
+            Text(text = "Join a Game", fontSize = 24.sp)
         }
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
-        Button(
-            onClick = onMotionDetectionClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.tertiary
-            )
-        ) {
-            Text("Motion Detection")
-        }
+
+//        Button(
+//            onClick = onMotionDetectionClick,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(56.dp),
+//            colors = ButtonDefaults.buttonColors(
+//                containerColor = MaterialTheme.colorScheme.tertiary
+//            )
+//        ) {
+//            Text("Motion Detection")
+//        }
     }
 }

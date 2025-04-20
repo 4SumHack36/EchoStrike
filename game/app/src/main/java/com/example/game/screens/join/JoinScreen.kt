@@ -20,6 +20,7 @@ import com.example.game.screenmodels.ConnectionState
 import com.example.game.screenmodels.GameScreenModel
 import com.example.game.screenmodels.GameState
 import com.example.game.screenmodels.GameTurn
+
 class JoinScreen : Screen {
     @Composable
     override fun Content() {
@@ -30,17 +31,17 @@ class JoinScreen : Screen {
         val isScanning by gameScreenModel.isScanning.collectAsState()
         val connectionState by gameScreenModel.connectionState.collectAsState()
         val errorMessage by gameScreenModel.errorMessage.collectAsState()
-        
+
         // Navigate to GameScreen when connection is established
         LaunchedEffect(connectionState) {
             if (connectionState is ConnectionState.Connected) {
                 navigator.push(GameScreen(gameScreenModel))
             }
         }
-        
+
         // Snackbar host state for showing errors
         val snackbarHostState = remember { SnackbarHostState() }
-        
+
         // Show error messages in Snackbar
         LaunchedEffect(errorMessage) {
             errorMessage?.let {
@@ -82,7 +83,7 @@ class JoinScreen : Screen {
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
-                
+
                 // Connection state handler
                 when (connectionState) {
                     is ConnectionState.Connecting -> {
@@ -110,7 +111,7 @@ class JoinScreen : Screen {
                             }
                         }
                     }
-                    
+
                     is ConnectionState.Connected -> {
                         // Show connecting indicator until navigation happens
                         Card(
@@ -141,14 +142,14 @@ class JoinScreen : Screen {
                             }
                         }
                     }
-                    
+
                     else -> {
                         // Show available hosts for joining
                         if (isScanning) {
                             LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
                             Spacer(modifier = Modifier.height(16.dp))
                         }
-                        
+
                         if (availableHosts.isEmpty() && !isScanning) {
                             Text(
                                 text = "No hosts found. Make sure the host is online and on the same network.",
@@ -165,6 +166,7 @@ class JoinScreen : Screen {
                                         Row(
                                             modifier = Modifier
                                                 .fillMaxWidth()
+                                                .weight(2f)
                                                 .padding(16.dp),
                                             horizontalArrangement = Arrangement.SpaceBetween,
                                             verticalAlignment = Alignment.CenterVertically
@@ -173,16 +175,19 @@ class JoinScreen : Screen {
                                             Button(onClick = {
                                                 gameScreenModel.connectToHost(host)
                                             }) {
-                                                Text("Join")
+                                                Text(
+                                                    text = "Join",
+                                                    modifier = Modifier.weight(1f)
+                                                )
                                             }
                                         }
                                     }
                                 }
                             }
                         }
-                        
+
                         Spacer(modifier = Modifier.weight(1f))
-                        
+
                         Button(
                             onClick = { gameScreenModel.startDiscovery(context) },
                             modifier = Modifier
@@ -196,5 +201,5 @@ class JoinScreen : Screen {
             }
         }
     }
-    
+
 }
