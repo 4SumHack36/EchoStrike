@@ -5,7 +5,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 
 @Composable
-fun LanChatTheme(content: @Composable () -> Unit) {
+fun LanGameTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = darkColorScheme(),
         content = content

@@ -25,8 +25,9 @@ class MainActivity : ComponentActivity() {
         SoundManager.loadSound(this, R.raw.opponenthit)
         SoundManager.loadSound(this, R.raw.bounce2)
         SoundManager.loadSound(this, R.raw.whiff)
+        SoundManager.loadSound(this, R.raw.bounce2)
         setContent {
-            LanChatTheme {
+            LanGameTheme {
                 Navigator(HomeScreen()) { navigator ->
                     SlideTransition(navigator)
                 }

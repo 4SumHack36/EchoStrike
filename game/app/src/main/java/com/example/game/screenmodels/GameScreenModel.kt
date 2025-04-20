@@ -523,7 +523,7 @@ class GameScreenModel(private val context: Context) : ScreenModel {
                         }
                         else{
                             KToast.show(context,"You missed it")
-
+                            SoundManager.playSound(R.raw.wall_hitsound, 1.0f, 0.toFloat())
                             (context as Activity).finishAffinity()
                         }
                     }
@@ -554,6 +554,7 @@ class GameScreenModel(private val context: Context) : ScreenModel {
                         }
                         else{
                             KToast.show(context,"You missed it")
+                            SoundManager.playSound(R.raw.wall_hitsound, 1.0f, 0.toFloat())
                             (context as Activity).finishAffinity()
                         }
 //                        if (_gameState.value == GameState.IN_PROGRESS) {
