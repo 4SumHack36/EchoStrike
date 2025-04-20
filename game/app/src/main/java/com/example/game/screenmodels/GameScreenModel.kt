@@ -19,6 +19,7 @@ import com.example.game.util.SensorManagerUtil
 import com.example.game.util.SoundManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,6 +40,7 @@ import java.util.*
 import kotlin.random.Random
 
 var predictedClass by mutableIntStateOf(-1)
+var lastRandomValue = 1
 // Connection state to track the status of connections
 sealed class ConnectionState {
     object Disconnected : ConnectionState()
@@ -403,6 +405,7 @@ class GameScreenModel(private val context: Context) : ScreenModel {
                 screenModelScope.launch(Dispatchers.IO) {
                     try {
                         val randomValue = Random.nextInt(0, 3)
+                        lastRandomValue = randomValue;
                         writer?.println("$username:$randomValue")
 
                         withContext(Dispatchers.Main) {
@@ -442,28 +445,21 @@ class GameScreenModel(private val context: Context) : ScreenModel {
 
     private fun handleReceivedGameValue(value: Int) {
         if (_gameState.value != GameState.IN_PROGRESS) return
-
         //Audio cue for player
-        val soundManager = SoundManager()
-
-        soundManager.loadSound(context, R.raw.opponenthit)
-        soundManager.loadSound(context, R.raw.bounce2)
-        soundManager.loadSound(context, R.raw.whiff)
-
-        val direction = value -1;
+        println("Hello World!")
+        val direction = value - 1;
+        val oppDirection = lastRandomValue - 1;
 
         CoroutineScope(Dispatchers.Main).launch {
 
-            // Pre-warmup: optional but useful
-            soundManager.playSound(R.raw.opponenthit, 0.5f, direction.toFloat())
+            delay(500L)
 
-            delay(1000L)  // let the audio system "lock-in"
+            SoundManager.playSound(R.raw.bounce2, 0.5f, direction.toFloat())  // Play for real
 
-            soundManager.playSound(R.raw.bounce2, 1.0f, direction.toFloat())  // Play for real
+            delay(1000L)
 
-            delay(400L)
-
-            soundManager.playSound(R.raw.whiff, 0.8f, direction.toFloat())
+            SoundManager.playSound(R.raw.whiff, 0.8f, direction.toFloat())
+//            delay(50L)
 
         }
 
@@ -494,31 +490,33 @@ class GameScreenModel(private val context: Context) : ScreenModel {
                     // Simulate 1-second delay before "playing" the sound
                     screenModelScope.launch {
                         // Add a message indicating the delay
-                        _messages.value = _messages.value + GameMessage(
-                            content = "Preparing sound: ${soundDirection.displayName}...",
-                            senderName = "System",
-                            isFromMe = true
-                        )
+//                        _messages.value = _messages.value + GameMessage(
+//                            content = "Preparing sound: ${soundDirection.displayName}...",
+//                            senderName = "System",
+//                            isFromMe = true
+//                        )
 
-                        // 1-second delay
-//                        kotlinx.coroutines.delay(500)
+                        // 3-second delay
+
+                        delay(3500)
 
                         // After delay, "play" the sound (just update UI for now)
-                        _messages.value = _messages.value + GameMessage(
-                            content = "Playing sound: ${soundDirection.displayName}",
-                            senderName = "System",
-                            isFromMe = true
-                        )
+//                        _messages.value = _messages.value + GameMessage(
+//                            content = "Playing sound: ${soundDirection.displayName}",
+//                            senderName = "System",
+//                            isFromMe = true
+//                        )
 
                         // After "playing" the sound, wait a moment then automatically send response value
-                        kotlinx.coroutines.delay(5000) // Wait 2 seconds to simulate user response time
+//                        kotlinx.coroutines.delay(5000) // Wait 2 seconds to simulate user response time
 
                         // Auto-send random value as host's response
 //                        if (_gameState.value == GameState.IN_PROGRESS) {
 //                            sendRandomValue()
 //                        }
+
                         if(value == predictedClass){
-                            soundManager.playSound(R.raw.opponenthit, 1.0f, direction.toFloat())
+                            SoundManager.playSound(R.raw.opponenthit, 1.0f, direction.toFloat())
                             sendRandomValue()
 
                             predictedClass=-1
@@ -548,15 +546,15 @@ class GameScreenModel(private val context: Context) : ScreenModel {
 
                     // Client automatically responds after a short delay
                     screenModelScope.launch {
-                        kotlinx.coroutines.delay(3000) // Wait 1.5 seconds to simulate thinking time
-
+                        delay(3500)
                         // Auto-send random value as client's response
                         if(predictedClass == value){
+                            SoundManager.playSound(R.raw.opponenthit, 1.0f, direction.toFloat())
                             sendRandomValue()
                         }
                         else{
                             KToast.show(context,"You missed it")
-                            disconnect()
+                            (context as Activity).finishAffinity()
                         }
 //                        if (_gameState.value == GameState.IN_PROGRESS) {
 //                            sendRandomValue()

@@ -6,7 +6,7 @@ import android.media.SoundPool
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class SoundManager {
+object SoundManager {
     private val soundPool: SoundPool = SoundPool.Builder()
         .setMaxStreams(4)
         .setAudioAttributes(
